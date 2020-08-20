@@ -1,0 +1,100 @@
+#include <stdio.h>
+#include <math.h>
+#include <locale.h>
+
+main()
+{
+
+	setlocale(LC_ALL,"Portuguese");
+
+	float to; //extremo inferior da integral
+	float tf; //extremo superior da integral
+	float N; //quantidade de subdivisões
+	float h; //tf-to/N
+	int i; //índice do vetor que armazena o resultado exato
+	float integral; //resultado exato
+	float ti; //to+i.h
+	float vetorT[11]; //armazena os valores de ti
+	float vetorIntegral[11]; //armazena os resultados exatos
+	float soma=0; //resultado numerico
+	float termo=0; //termos da soma que gera o resultado numerico
+	int k; //indice do vetor que armazena o resultado numerico
+	float vetorNumerico[11]; //armazena os resultados numericos
+	float erro=0; //cada erro absoluto
+	float vetorErro[11]; //armazena os erros entre os resultados (vetorIntegral-vetorNumerico)
+
+	printf("\nt0= ");
+	scanf("%f", &to);
+
+	printf("\ntf= ");
+	scanf("%f", &tf);
+
+	printf("\nN= ");
+	scanf("%f", &N);
+
+	h=(tf-to)/N;
+	printf("\nh vale=%f\n",h);
+
+	vetorIntegral[0]=0;
+
+    vetorT[0]=to;
+
+	for(i=1; i<=N; i++) //for que calcula a solução exata
+		{
+			ti=to+(i*h);
+
+			vetorT[i]=ti;
+
+			integral=pow(ti,2);
+
+			vetorIntegral[i]=integral;
+
+			integral=0;
+		}
+
+	for(i=0; i<=N; i++)	//for que printa os valores da solução exata
+		printf("\n\tA solução exata %d vale: \t|%f|\n", i, vetorIntegral[i]);
+
+printf("\n-------------------------------------------------------------------");
+
+    vetorNumerico[0]=0;
+
+
+ 	for(k=1; k<=N; k++) //for que calcula a sulução numérica
+    {
+       termo=termo+2*h*(to+k*h);
+
+        soma+=termo;
+
+    	vetorNumerico[k]=soma;
+
+        termo=0;
+
+    }
+
+    for(i = 0; i<=N; i++) //for que printa os valores da solução numérica
+        printf("\n\tA solução numérica %d vale:\t|%f|\n",i,vetorNumerico[i]);
+
+printf("\n-------------------------------------------------------------------");
+
+    for(i=0; i<=N; i++) //for que calcula o erro absoluto
+    	{
+    		erro = vetorIntegral[i]-vetorNumerico[i];
+
+    		vetorErro[i]=fabs(erro);
+
+    		erro=0;
+		}
+
+	for(i=0; i<=N; i++) //for que printa os valores dos erros absolutos
+		printf("\n\tO erro absoluto para i=%d entre as soluções é: \t|%f|\n", i, vetorErro[i]);
+
+printf("\n-------------------------------------------------------------------");
+
+	printf("\n\n\nTabela com os valores obtidos para cada i");
+        printf("\n i \t Valor do ti \t Exato \t Numérico \t Erro \t ");
+	for(i=0; i<=N; i++)
+		printf("\n\ni=%d \t |%f| \t |%f| \t |%f| \t |%f|", i, vetorT[i], vetorIntegral[i], vetorNumerico[i], vetorErro[i]);
+
+
+}
