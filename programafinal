@@ -1,0 +1,126 @@
+/* Este programa resolve um PVI do tipo y'=f(t,y), com y(t0)=y0, para o intervalo t0<=t<=tf.
+Para resolver, é usado o método de Iterações de Picard, com a integral calculada pela Soma de
+Riemann à esquerda (com N subdivisões).
+
+Os valores de t0, tf, y0 são digitados pelo usuário na tela, enquanto f deve ser digitada na linha
+123 do programa.
+
+O usuário também deve fornecer N, o inteiro que corresponde ao número de subdivisões do intervalo [t0,tf]
+de comprimento h=(tf-t0)/N; e max, o inteiro maior ou igual a 1 que corresponde ao número de termos a
+serem calculados da sequência de Picard.
+*/
+
+#include <stdio.h>
+#include <locale.h>
+#include <math.h>
+#include <stdlib.h>
+
+float F(float t, float y);
+float T(float *t, float t0, int i, float h, int x);
+
+int main()
+{
+	int i=0; //contador
+	int k=0; //contador
+	float soma=0;
+
+	float t0;
+	float tf;
+
+	float y0; //condição inicial do pvi
+	float f; //y'=f(y,t)
+
+	float N; //quantidade de subdivisões para a aproximação
+
+	int max; //quantidade de funções phi a serem geradas
+
+	float h; //h=(tf-t0)/N
+
+	printf("Tenha o problema na forma y'=f(t,y), y(t0)=y0 para o intervalo t0<=t<=tf.\n\n");
+	printf("Digite t0:  ");
+	scanf("%f",&t0);
+	printf("Digite tf:  ");
+	scanf("%f",&tf);
+	printf("Digite yo:  ");
+	scanf("%f",&y0);
+	printf("Digite N:  ");
+	scanf("%f",&N);
+	printf("Digite max:  ");
+	scanf("%d",&max);
+
+	printf("\nt0=%f\t",t0);
+	printf("tf=%f\t",tf);
+	printf("y0=%f\t",y0);
+	printf("N=%f\t",N);
+	printf("max=%d\n",max);
+
+	int x=N+1; //somente por motivos de linguagem
+
+	float t[x]; //t0<=t<=tf, armazena os valores de ti
+
+	float phi[max][x]; //matriz que armazena os valores de phi, de zero até o max
+
+
+	h=(tf-t0)/N;
+
+	printf("\nh=%f\n\n\n",h);
+
+	T(t, t0, i, h, x);
+
+	printf("\n------------------------------------------------");
+
+	for(i=0; i<x; i++)
+	{
+		phi[0][i]=y0;
+
+		printf("\nPhi[0][%d] = %f", i, phi[0][i]);
+	}
+
+	printf("\n\n------------------------------------------------");
+
+	for(k=1; k<=max; k++)
+	{
+		for(i=0; i<x; i++)
+		{
+			if(i == 0)
+			{
+				phi[k][i]=y0;
+				printf("\nPhi[%d][%d] = %f", k, i, y0);
+			}
+
+        	else
+        	{
+            	soma+=(h*F(t[i-1],phi[k-1][i-1]));
+            	phi[k][i]=y0+soma;
+            	printf("\nPhi[%d][%d] = %f", k, i, phi[k][i]);
+
+        	}
+
+		 }soma=0;
+
+		printf("\n\n------------------------------------------------");
+	}
+}
+
+float T(float *t, float t0, int i, float h, int x)
+{
+	t[i]=t0+(i*h);
+	printf("t[%d] = %f\n",i,t[i]);
+
+	if(i==x-1)
+		return *t;
+
+	else
+		T(t,t0,i+1,h,x);
+}
+
+float F(float t, float y)
+{
+	//digite f aqui
+
+	float f;
+
+	f=;
+
+	return(f);
+}
